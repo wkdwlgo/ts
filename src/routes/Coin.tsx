@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useParams, useLocation } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useParams, useLocation, } from 'react-router';
 import styled, { keyframes } from "styled-components";
 
 interface RouteParams {
@@ -51,7 +51,17 @@ function Coin() {
 const [loading, setLoading]= useState(true);
 const { coinID } = useParams() as unknown as RouteParams;
 const {state} = useLocation() as RouteState;
-const location = useLocation();
+const [coinInfoData, setCoinInfoData]=useState({});
+const [coinPriceData, setCoinPriceData]=useState({});
+    useEffect(()=>{
+        (async()=>{
+            const infoData = await((await fetch(`https://api.coinpaprika.com/v1/coins/${coinID}`))).json();
+            const priceData= await((await fetch(`https://api.coinpaprika.com/v1/tickers/${coinID}`))).json();
+            setCoinInfoData(infoData);
+            setCoinPriceData(priceData);
+            setLoading(false);
+        })()
+    },[])
 
 return (
     <Container>
