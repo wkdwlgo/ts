@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, } from 'react-router';
 import styled, { keyframes } from "styled-components";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckSquare, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSquare } from "@fortawesome/free-regular-svg-icons";
 interface RouteParams {
 coinID: string;
 }
@@ -30,6 +32,14 @@ interface InfoData{
     hash_algorithm :string;
     first_data_at :string;
     last_data_at :string;
+    links:{
+        explorer:object;
+        facebook:object;
+        reddit:object;
+        source_code:object;
+        website:object;
+        youtub:object;
+    };
 }
 
 interface PriceData{
@@ -72,6 +82,7 @@ const Container =styled.div`
     margin: 0 auto;
 `;
 
+
 const Header = styled.header`
     height: 10vh;
     display: flex;
@@ -103,6 +114,36 @@ const Spinner = styled.div`
   animation: ${rotation} 1s linear infinite;
 `;
 
+const TotalBox=styled.div`
+    background-color: ${(props)=> props.theme.textColor};
+    color: ${(props)=> props.theme.bgColor};
+    padding:20px;
+    border-radius: 15px;
+    margin-bottom: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const InforBox=styled.div`
+    background-color: ${(props)=> props.theme.textColor};
+    color: ${(props)=> props.theme.bgColor};
+    border-radius: 15px;
+    padding:20px;
+    margin-bottom: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+`;
+
+const CoinImg = styled.img`
+    width: 35px;
+    height: 35px;
+    margin: 0 10px 0 0 ;
+`;
+
+
 function Coin() {
 const [loading, setLoading]= useState(true);
 const { coinID } = useParams() as unknown as RouteParams;
@@ -119,16 +160,45 @@ const [coinPriceData, setCoinPriceData]=useState<PriceData>();
             setCoinPriceData(priceData);
             setLoading(false);
         })()
-    },[])
+    },[coinID])//coinID가 변경되면 useEffect 다시 실행함. [] 이렇게 입력하면 hook에 좋지 않다.
 
 return (
     <Container>
             <Header>
-                <Title>{state ? state: "Loading"}</Title>
+                <Title>{state ? state: loading ? "Loading" :coinInfoData?.name }</Title>
             </Header>
            {loading ? (
             <Spinner/>
-            ):(null)}
+            )
+            :( 
+                <>
+                    <InforBox>
+                    <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coinID}.png`}/>
+                    <ul className=''>
+                        <li>{coinInfoData?.name}</li>
+                        <li>{coinInfoData?.symbol}</li>
+                        <li>{coinInfoData?.started_at.slice(0,7).replace('-','.')}</li>
+                        <li>{coinInfoData?.description}</li>
+                        <li></li>
+                    </ul>
+                    </InforBox>
+                    
+                    <TotalBox>
+                        <span>
+                            <p>RANK:</p>
+                            <p>{coinInfoData?.rank}</p>
+                        </span>
+                        <span>
+                            <p>SYMBOL:</p>
+                            <p>{coinInfoData?.symbol}</p>
+                        </span>
+                        <span>
+                            <p>OPEN SOURCE:</p>
+                            <p>{coinInfoData?.open_source ? 'YES' : 'No'}</p>
+                        </span>
+                    </TotalBox>
+                </>
+            )}
     </Container>
 )
 }

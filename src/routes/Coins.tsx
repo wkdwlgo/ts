@@ -24,10 +24,27 @@ const Coin= styled.li`
     padding:20px;
     border-radius: 15px;
     margin-bottom: 10px;
+    
     a{
         display: block;//이렇게 하면 카드의 끝부분 까지도 클릭 할 수 있음
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        div{
+            display: flex;
+            align-items: center;
+            padding-left: 1rem;
+            font-size: 1.4rem;
+        }
+        .Coin__div__rank{
+            padding-right: 1.3rem;
+        }
+        .Coin__div__sym{
+            padding-left: 0.5rem;
+            font-size: 1rem;
+            color:#86888a;
+        }
+
     }
     &:hover {
         transform: scale(1.1);
@@ -94,7 +111,7 @@ function Coins(){
     return (
         <Container>
             <Header>
-                <Title>코인</Title>
+                <Title>CCOINFOR</Title>
             </Header>
            {loading ? (
             <Spinner></Spinner>
@@ -102,8 +119,9 @@ function Coins(){
             <CoinList>
                 {coins.map((coin) => (<Coin key={coin.id}>
                     <Link to={`/${coin.id}`} state={coin.name}>
+                    <div><span className="Coin__div__rank">{coin.rank}</span>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}/>
-                    {coin.name} &rarr;</Link></Coin>))}
+                     {coin.name} <span className="Coin__div__sym">{coin.symbol}</span></div> <div>&rarr;</div></Link></Coin>))}
             </CoinList>
             )}
         </Container>
