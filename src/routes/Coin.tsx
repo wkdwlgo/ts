@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, } from 'react-router';
+import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom';
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckSquare, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faSquare } from "@fortawesome/free-regular-svg-icons";
+import { faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons'
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import Chart from './Chart';
+import Price from './Price';
+
 interface RouteParams {
 coinID: string;
 }
@@ -33,12 +37,12 @@ interface InfoData{
     first_data_at :string;
     last_data_at :string;
     links:{
-        explorer:object;
-        facebook:object;
-        reddit:object;
-        source_code:object;
-        website:object;
-        youtub:object;
+        explorer: string[];
+        facebook: string[];
+        reddit: string[];
+        source_code: string[];
+        website: string[];
+        youtube: string[];
     };
 }
 
@@ -117,30 +121,57 @@ const Spinner = styled.div`
 const TotalBox=styled.div`
     background-color: ${(props)=> props.theme.textColor};
     color: ${(props)=> props.theme.bgColor};
-    padding:20px;
+    padding:15px 20px;
     border-radius: 15px;
     margin-bottom: 1.3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.3rem;
+    text-align: center;
+        span{
+            .total__title{
+                font-size: 0.7rem;
+                padding-bottom: 0.4rem;
+            }
+        }
 `;
 
 const InforBox=styled.div`
     background-color: ${(props)=> props.theme.textColor};
     color: ${(props)=> props.theme.bgColor};
     border-radius: 15px;
-    padding:20px;
+    padding:20px 20px 15px 20px;
     margin-bottom: 1.3rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-
+    justify-content: space-evenly;
+    .inforBox__ul{
+        
+        li{
+            display: flex;
+            align-items: center;
+            padding-bottom: 0.25rem;
+            a{
+                display: flex;
+                padding-right: 0.3rem;
+                .a__fontawsome{
+                    font-size: 1.2rem;
+                }
+                .youtube__icon{
+                    font-size: 1.27rem;
+                }
+            }
+            
+        }
+    }
+   
 `;
 
 const CoinImg = styled.img`
-    width: 35px;
-    height: 35px;
-    margin: 0 10px 0 0 ;
+    width: 65px;
+    height: 65px;
+    margin: 0 20px 0 0 ;
 `;
 
 
@@ -174,32 +205,57 @@ return (
                 <>
                     <InforBox>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coinID}.png`}/>
-                    <ul className=''>
-                        <li>{coinInfoData?.name}</li>
-                        <li>{coinInfoData?.symbol}</li>
-                        <li>{coinInfoData?.started_at.slice(0,7).replace('-','.')}</li>
-                        <li>{coinInfoData?.description}</li>
-                        <li></li>
+                    <ul className='inforBox__ul'>
+                        <li>
+                            <p>{coinInfoData?.name}</p>
+                        </li>
+                        <li>
+                            <p>Started at {coinInfoData?.started_at.slice(0,7).replace('-','.')}</p>
+                        </li>
+                        <li>
+                            <p>{coinInfoData?.description}</p>
+                        </li>
+                        <li>
+                            <a href={`${coinInfoData?.links.website?.[0]}`}><FontAwesomeIcon icon={faHouse} className='a__fontawsome' /></a>
+                            <a href={`${coinInfoData?.links.facebook?.[0]}`}><FontAwesomeIcon icon={faFacebook} className='a__fontawsome' /></a>
+                            <a href={`${coinInfoData?.links.youtube?.[0]}`}><FontAwesomeIcon icon={faYoutube} className='a__fontawsome youtube__icon' /></a>
+                        </li>
                     </ul>
                     </InforBox>
                     
                     <TotalBox>
                         <span>
-                            <p>RANK:</p>
+                            <p className='total__title'>RANK:</p>
                             <p>{coinInfoData?.rank}</p>
                         </span>
                         <span>
-                            <p>SYMBOL:</p>
+                            <p className='total__title'>SYMBOL:</p>
                             <p>{coinInfoData?.symbol}</p>
                         </span>
                         <span>
-                            <p>OPEN SOURCE:</p>
+                            <p className='total__title'>OPEN SOURCE:</p>
                             <p>{coinInfoData?.open_source ? 'YES' : 'No'}</p>
                         </span>
                     </TotalBox>
+
+                    <TotalBox>
+                        <span>
+                            <p className='total__title'>TOTAL SUPPLY:</p>
+                            <p>{coinPriceData?.total_supply}</p>
+                        </span>
+                        <span>
+                            <p className='total__title'>MAX SUPPLY:</p>
+                            <p>{coinPriceData?.max_supply}</p>
+                        </span>
+                    </TotalBox>
+                    <Routes>
+                        <Route path="chart" element={<Chart />} />
+                        <Route path="price" element={<Price />} />
+                    </ Routes>
                 </>
             )}
     </Container>
+    
 )
 }
 export default Coin;
