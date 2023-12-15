@@ -9,6 +9,7 @@ import Chart from './Chart';
 import Price from './Price';
 import { fetchInfoData, fetchPriceData} from "../api";
 import { useQuery } from 'react-query';
+import {Helmet} from "react-helmet";
 interface RouteParams {
 coinID: string;
 }
@@ -190,7 +191,7 @@ const Tab= styled.span<{isActive:boolean}>`
     
     padding:8px 13px;
     border-radius: 13px;
-    margin-bottom: 1.3rem;
+    margin-bottom: 0.5rem;
     border: solid 2px ${(props)=>props.theme.accentColor};
     background-color: ${(props)=> props.theme.textColor};
     color: ${props=> props.isActive ? props.theme.accentColor : props.theme.bgColor};
@@ -211,7 +212,9 @@ const {state} = useLocation() as RouteState;
 const priceMatch = useMatch("/:coinId/price");
 const chartMatch = useMatch("/:coinId/chart");
 const{/*3*/isLoading: infoLoading, data: inforData}=useQuery<InfoData>(/*1*/['info',coinID],/*2*/ () => fetchInfoData(coinID));
-const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID));
+const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID),{
+    refetchInterval:5000,
+});
 // const [loading, setLoading]= useState(true);
 // const [coinInfoData, setCoinInfoData]=useState<InfoData>();//TS가 뭐가 뭔지 다 아니깐 ()안에 {} 다 지워주자.
 // const [coinPriceData, setCoinPriceData]=useState<PriceData>();
@@ -229,6 +232,10 @@ const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coi
 const loading=infoLoading || priceLoading;
 return (
     <Container>
+            <Helmet>
+                <title>{state ? state: loading ? "Loading" :inforData?.name }</title>
+                
+            </Helmet>
             <Header>
                 <Title>{state ? state: loading ? "Loading" :inforData?.name }</Title>
             </Header>
@@ -267,8 +274,8 @@ return (
                             <p>{inforData?.symbol}</p>
                         </span>
                         <span>
-                            <p className='total__title'>OPEN SOURCE:</p>
-                            <p>{inforData?.open_source ? 'YES' : 'No'}</p>
+                            <p className='total__title'>PRICE:</p>
+                            <p>${priceData?.quotes.USD.price.toFixed(3)}</p>
                         </span>
                     </TotalBox>
                     
