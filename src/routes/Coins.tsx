@@ -1,6 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import { fetchCoins } from "../api";
 const Container =styled.div`
     padding: 0px 20px;
     max-width: 480px;
@@ -87,7 +89,7 @@ const CoinImg = styled.img`
     margin: 0 10px 0 0 ;
 `;
 
-interface CoinInterface{
+interface ICoin{
     id: string,
     name: string,
     symbol: string,
@@ -98,26 +100,26 @@ interface CoinInterface{
 }
 
 function Coins(){
-    const [coins, setCoins]=useState<CoinInterface[]>([]);
-    const [loading, setLoading]=useState(true);
-    useEffect(()=>{
-        (async()=>{
-            const response = await fetch("https://api.coinpaprika.com/v1/coins");
-            const json= await response.json();
-            setCoins(json.slice(0,100));
-            setLoading(false);
-        })()
-    },[])
+    const {isLoading, data}=useQuery<ICoin[]>("allCoins", fetchCoins)
+    // const [coins, setCoins]=useState<CoinInterface[]>([]);
+    // const [loading, setLoading]=useState(true);
+    // useEffect(()=>{
+    //     (async()=>{
+           
+    //         setCoins(json.slice(0,100));
+    //         setLoading(false);
+    //     })()
+    // },[])
     return (
         <Container>
             <Header>
                 <Title>CCOINFOR</Title>
             </Header>
-           {loading ? (
+           {isLoading ? (
             <Spinner></Spinner>
             ):(
             <CoinList>
-                {coins.map((coin) => (<Coin key={coin.id}>
+                {data?.slice(0,100).map((coin) => (<Coin key={coin.id}>
                     <Link to={`/${coin.id}`} state={coin.name}>
                     <div><span className="Coin__div__rank">{coin.rank}</span>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}/>

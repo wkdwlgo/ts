@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect , } from 'react';
 import { useParams, useLocation, } from 'react-router';
-import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route ,Outlet, Link,useMatch } from 'react-router-dom';
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import Chart from './Chart';
 import Price from './Price';
-
+import { fetchInfoData, fetchPriceData} from "../api";
+import { useQuery } from 'react-query';
 interface RouteParams {
 coinID: string;
 }
@@ -129,6 +130,7 @@ const TotalBox=styled.div`
     align-items: center;
     font-size: 1.3rem;
     text-align: center;
+    border: solid 2px ${(props)=>props.theme.accentColor};
         span{
             .total__title{
                 font-size: 0.7rem;
@@ -146,6 +148,7 @@ const InforBox=styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    border: solid 2px ${(props)=>props.theme.accentColor};
     .inforBox__ul{
         
         li{
@@ -169,34 +172,65 @@ const InforBox=styled.div`
 `;
 
 const CoinImg = styled.img`
-    width: 65px;
-    height: 65px;
+    width: 70px;
+    height: 70px;
     margin: 0 20px 0 0 ;
+`;
+
+const Tabs= styled.div`
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    margin: 25px 0px;
+    gap: 10px;
+`;
+
+const Tab= styled.span<{isActive:boolean}>`
+    text-align: center;
+    font-size: 1.1rem;
+    
+    padding:8px 13px;
+    border-radius: 13px;
+    margin-bottom: 1.3rem;
+    border: solid 2px ${(props)=>props.theme.accentColor};
+    background-color: ${(props)=> props.theme.textColor};
+    color: ${props=> props.isActive ? props.theme.accentColor : props.theme.bgColor};
+        a{
+            display: block;
+        }
+        &:hover {
+        transform: scale(1.05);
+        transition: all 1s ease-in;
+        
+    }
 `;
 
 
 function Coin() {
-const [loading, setLoading]= useState(true);
 const { coinID } = useParams() as unknown as RouteParams;
 const {state} = useLocation() as RouteState;
-const [coinInfoData, setCoinInfoData]=useState<InfoData>();//TS가 뭐가 뭔지 다 아니깐 ()안에 {} 다 지워주자.
-const [coinPriceData, setCoinPriceData]=useState<PriceData>();
-    useEffect(()=>{
-        (async()=>{
-            const infoData = await((await fetch(`https://api.coinpaprika.com/v1/coins/${coinID}`))).json();
-            const priceData= await((await fetch(`https://api.coinpaprika.com/v1/tickers/${coinID}`))).json();
-            console.log(infoData)
-            console.log(priceData)
-            setCoinInfoData(infoData);
-            setCoinPriceData(priceData);
-            setLoading(false);
-        })()
-    },[coinID])//coinID가 변경되면 useEffect 다시 실행함. [] 이렇게 입력하면 hook에 좋지 않다.
+const priceMatch = useMatch("/:coinId/price");
+const chartMatch = useMatch("/:coinId/chart");
+const{/*3*/isLoading: infoLoading, data: inforData}=useQuery<InfoData>(/*1*/['info',coinID],/*2*/ () => fetchInfoData(coinID));
+const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID));
+// const [loading, setLoading]= useState(true);
+// const [coinInfoData, setCoinInfoData]=useState<InfoData>();//TS가 뭐가 뭔지 다 아니깐 ()안에 {} 다 지워주자.
+// const [coinPriceData, setCoinPriceData]=useState<PriceData>();
+// console.log(priceMatch)
+//     useEffect(()=>{
+//         (async()=>{
+//             const infoData = await((await fetch(`https://api.coinpaprika.com/v1/coins/${coinID}`))).json();
+//             const priceData= await((await fetch(`https://api.coinpaprika.com/v1/tickers/${coinID}`))).json();
+//             setCoinInfoData(infoData);
+//             setCoinPriceData(priceData);
+//             setLoading(false);
+//         })()
+//     },[coinID])//coinID가 변경되면 useEffect 다시 실행함. [] 이렇게 입력하면 hook에 좋지 않다.
 
+const loading=infoLoading || priceLoading;
 return (
     <Container>
             <Header>
-                <Title>{state ? state: loading ? "Loading" :coinInfoData?.name }</Title>
+                <Title>{state ? state: loading ? "Loading" :inforData?.name }</Title>
             </Header>
            {loading ? (
             <Spinner/>
@@ -207,18 +241,18 @@ return (
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coinID}.png`}/>
                     <ul className='inforBox__ul'>
                         <li>
-                            <p>{coinInfoData?.name}</p>
+                            <p>{inforData?.name}</p>
                         </li>
                         <li>
-                            <p>Started at {coinInfoData?.started_at.slice(0,7).replace('-','.')}</p>
+                            <p>Started at {inforData?.started_at.slice(0,7).replace('-','.')}</p>
                         </li>
                         <li>
-                            <p>{coinInfoData?.description}</p>
+                            <p>{inforData?.description}</p>
                         </li>
                         <li>
-                            <a href={`${coinInfoData?.links.website?.[0]}`}><FontAwesomeIcon icon={faHouse} className='a__fontawsome' /></a>
-                            <a href={`${coinInfoData?.links.facebook?.[0]}`}><FontAwesomeIcon icon={faFacebook} className='a__fontawsome' /></a>
-                            <a href={`${coinInfoData?.links.youtube?.[0]}`}><FontAwesomeIcon icon={faYoutube} className='a__fontawsome youtube__icon' /></a>
+                            <a href={`${inforData?.links.website?.[0]}`}><FontAwesomeIcon icon={faHouse} className='a__fontawsome' /></a>
+                            <a href={`${inforData?.links.facebook?.[0]}`}><FontAwesomeIcon icon={faFacebook} className='a__fontawsome' /></a>
+                            <a href={`${inforData?.links.youtube?.[0]}`}><FontAwesomeIcon icon={faYoutube} className='a__fontawsome youtube__icon' /></a>
                         </li>
                     </ul>
                     </InforBox>
@@ -226,30 +260,38 @@ return (
                     <TotalBox>
                         <span>
                             <p className='total__title'>RANK:</p>
-                            <p>{coinInfoData?.rank}</p>
+                            <p>{inforData?.rank}</p>
                         </span>
                         <span>
                             <p className='total__title'>SYMBOL:</p>
-                            <p>{coinInfoData?.symbol}</p>
+                            <p>{inforData?.symbol}</p>
                         </span>
                         <span>
                             <p className='total__title'>OPEN SOURCE:</p>
-                            <p>{coinInfoData?.open_source ? 'YES' : 'No'}</p>
+                            <p>{inforData?.open_source ? 'YES' : 'No'}</p>
                         </span>
                     </TotalBox>
-
+                    
                     <TotalBox>
                         <span>
                             <p className='total__title'>TOTAL SUPPLY:</p>
-                            <p>{coinPriceData?.total_supply}</p>
+                            <p>{priceData?.total_supply}</p>
                         </span>
                         <span>
                             <p className='total__title'>MAX SUPPLY:</p>
-                            <p>{coinPriceData?.max_supply}</p>
+                            <p>{priceData?.max_supply}</p>
                         </span>
                     </TotalBox>
+                    <Tabs> 
+                        <Tab isActive={chartMatch!==null}>
+                            <Link to={`/${coinID}/chart`}>CHART</Link>
+                        </Tab>
+                        <Tab isActive={priceMatch!==null}>
+                            <Link to={`/${coinID}/price`}>PRICE</Link>
+                        </Tab>
+                    </Tabs>
                     <Routes>
-                        <Route path="chart" element={<Chart />} />
+                        <Route path="chart" element={<Chart coinID={coinID!}/>} />
                         <Route path="price" element={<Price />} />
                     </ Routes>
                 </>
