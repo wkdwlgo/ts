@@ -5,9 +5,14 @@ import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
 import {Helmet} from "react-helmet";
 const Container =styled.div`
-    padding: 0px 20px;
-    max-width: 480px;
     margin: 0 auto;
+    max-width: 480px;
+    padding: 0px 20px;
+    width: 100%;
+    @media (min-width: 992px) {
+        max-width: 1300px;
+    }
+
 `;
 
 const Header = styled.header`
@@ -15,10 +20,20 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    @media (min-width: 992px) {
+        
+    }
+
 `;
 
 const CoinList = styled.ul`
 
+     @media (min-width: 992px) {
+        display: grid;
+        grid-template-columns: repeat(5,1fr);
+        grid-template-rows: repeat(20,1fr);
+        gap: 13px;
+     }
 `;
 
 const Coin= styled.li`
@@ -36,6 +51,7 @@ const Coin= styled.li`
         div{
             display: flex;
             align-items: center;
+            justify-content: center;
             padding-left: 1rem;
             font-size: 1.4rem;
         }
@@ -47,7 +63,7 @@ const Coin= styled.li`
             font-size: 1rem;
             color:#86888a;
         }
-
+       
     }
     &:hover {
         transform: scale(1.1);
@@ -56,7 +72,33 @@ const Coin= styled.li`
             color: ${(props)=> props.theme.accentColor};
         }
     }
-    
+    @media (min-width: 992px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        a{
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .Coin__arrow{
+                display: none;
+            }
+            div{
+                text-align: center;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
+                
+            }
+            .Coin__div__rank{
+                display: none;
+            }
+            .Coin__div__sym{
+                padding: 0;
+            }
+        }
+     }
+  
 `;
 
 const Title=styled.h1`
@@ -88,6 +130,11 @@ const CoinImg = styled.img`
     width: 35px;
     height: 35px;
     margin: 0 10px 0 0 ;
+    @media (min-width: 992px) {
+        width: 50px;
+        height: 50px;
+        margin: 0 0 10px 0 ;
+    }
 `;
 
 interface ICoin{
@@ -125,9 +172,9 @@ function Coins(){
             <CoinList>
                 {data?.slice(0,100).map((coin) => (<Coin key={coin.id}>
                     <Link to={`/${coin.id}`} state={coin.name}>
-                    <div><span className="Coin__div__rank">{coin.rank}</span>
+                    <div className="Coin__div"><span className="Coin__div__rank">{coin.rank}</span>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}/>
-                     {coin.name} <span className="Coin__div__sym">{coin.symbol}</span></div> <div>&rarr;</div></Link></Coin>))}
+                     {coin.name} <span className="Coin__div__sym">{coin.symbol}</span></div> <div className="Coin__arrow">&rarr;</div></Link></Coin>))}
             </CoinList>
             )}
         </Container>
