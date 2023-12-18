@@ -84,6 +84,7 @@ const Coin= styled.li`
                 display: none;
             }
             div{
+                padding: 0;
                 text-align: center;
                 flex-direction: column;
                 justify-content: center;
