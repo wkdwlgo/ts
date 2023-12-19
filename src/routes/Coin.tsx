@@ -215,6 +215,7 @@ const{/*3*/isLoading: infoLoading, data: inforData}=useQuery<InfoData>(/*1*/['in
 const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID),{
     refetchInterval:5000,
 });
+
 // const [loading, setLoading]= useState(true);
 // const [coinInfoData, setCoinInfoData]=useState<InfoData>();//TS가 뭐가 뭔지 다 아니깐 ()안에 {} 다 지워주자.
 // const [coinPriceData, setCoinPriceData]=useState<PriceData>();
@@ -251,7 +252,7 @@ return (
                             <p>{inforData?.name}</p>
                         </li>
                         <li>
-                            <p>Started at {inforData?.started_at.slice(0,7).replace('-','.')}</p>
+                            <p>Started at {inforData?.started_at ? inforData.started_at.slice(0,7).replace('-','.') : 'N/A'}</p>
                         </li>
                         <li>
                             <p>{inforData?.description}</p>
@@ -300,7 +301,7 @@ return (
                     <Routes>
                         <Route path="chart" element={<Chart coinID={coinID!}/>} />
                         <Route path="price" element={<Price />} />
-                    </ Routes>
+                    </Routes>
                 </>
             )}
     </Container>
