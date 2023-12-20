@@ -86,6 +86,10 @@ const Container =styled.div`
     padding: 0px 20px;
     max-width: 480px;
     margin: 0 auto;
+    @media (min-width: 992px){
+        max-width: 1300px;
+        
+    }
 `;
 
 
@@ -118,6 +122,16 @@ const Spinner = styled.div`
   border-right: none;
   margin: 10rem auto;
   animation: ${rotation} 1s linear infinite;
+`;
+
+const ContainerDiv= styled.div`
+    @media (min-width: 992px){
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 40px;
+
+        
+    }
 `;
 
 const TotalBox=styled.div`
@@ -183,12 +197,16 @@ const Tabs= styled.div`
     grid-template-columns: repeat(2,1fr);
     margin: 25px 0px;
     gap: 10px;
+    @media (min-width: 992px){
+       margin: 0 0;
+      
+        
+    }
 `;
 
 const Tab= styled.span<{isActive:boolean}>`
     text-align: center;
     font-size: 1.1rem;
-    
     padding:8px 13px;
     border-radius: 13px;
     margin-bottom: 0.5rem;
@@ -203,6 +221,10 @@ const Tab= styled.span<{isActive:boolean}>`
         transition: all 1s ease-in;
         
     }
+    @media (min-width: 992px){
+       
+    }
+
 `;
 
 
@@ -244,7 +266,8 @@ return (
             <Spinner/>
             )
             :( 
-                <>
+                <ContainerDiv>  
+                    <div>
                     <InforBox>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coinID}.png`}/>
                     <ul className='inforBox__ul'>
@@ -290,6 +313,8 @@ return (
                             <p>{priceData?.max_supply}</p>
                         </span>
                     </TotalBox>
+                    </div>
+                    <div>
                     <Tabs> 
                         <Tab isActive={chartMatch!==null}>
                             <Link to={`/${coinID}/chart`}>CHART</Link>
@@ -298,11 +323,14 @@ return (
                             <Link to={`/${coinID}/price`}>PRICE</Link>
                         </Tab>
                     </Tabs>
+                    
                     <Routes>
                         <Route path="chart" element={<Chart coinID={coinID!}/>} />
                         <Route path="price" element={<Price />} />
                     </Routes>
-                </>
+                    
+                    </div>
+                </ContainerDiv>
             )}
     </Container>
     
