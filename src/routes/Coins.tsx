@@ -20,6 +20,7 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 1.5rem 0;
     @media (min-width: 992px) {
         
     }

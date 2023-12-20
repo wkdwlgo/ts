@@ -48,7 +48,7 @@ interface InfoData{
     };
 }
 
-interface PriceData{
+export interface PriceData{
     id: string;
     name:     string;
     symbol:     string;
@@ -82,6 +82,8 @@ interface PriceData{
     };
 }
 
+
+
 const Container =styled.div`
     padding: 0px 20px;
     max-width: 480px;
@@ -98,6 +100,7 @@ const Header = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 1.5rem 0;
 `;
 const Title=styled.h1`
     font-size: 3rem;
@@ -128,7 +131,14 @@ const ContainerDiv= styled.div`
     @media (min-width: 992px){
         display: grid;
         grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(1, 1fr);
         gap: 40px;
+        .infor__div{
+           display: flex;
+           flex-direction: column;
+           justify-content: space-between;
+            
+        }
 
         
     }
@@ -198,8 +208,8 @@ const Tabs= styled.div`
     margin: 25px 0px;
     gap: 10px;
     @media (min-width: 992px){
-       margin: 0 0;
-      
+       margin: 0 0 15px 0;
+       gap: 15px;
         
     }
 `;
@@ -267,7 +277,7 @@ return (
             )
             :( 
                 <ContainerDiv>  
-                    <div>
+                    <div className='infor__div'>
                     <InforBox>
                     <CoinImg src={`https://cryptocurrencyliveprices.com/img/${coinID}.png`}/>
                     <ul className='inforBox__ul'>
@@ -305,6 +315,10 @@ return (
                     
                     <TotalBox>
                         <span>
+                            <p className='total__title'>CIRCULATING SUPPLY:</p>
+                            <p>{priceData?.circulating_supply}</p>
+                        </span>
+                        <span>
                             <p className='total__title'>TOTAL SUPPLY:</p>
                             <p>{priceData?.total_supply}</p>
                         </span>
@@ -325,8 +339,8 @@ return (
                     </Tabs>
                     
                     <Routes>
-                        <Route path="chart" element={<Chart coinID={coinID!}/>} />
-                        <Route path="price" element={<Price />} />
+                        <Route path="chart" element={<Chart coinID={coinID!} />} />
+                        <Route path="price" element={<Price priceData={priceData!} />} />
                     </Routes>
                     
                     </div>
