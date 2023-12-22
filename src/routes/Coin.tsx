@@ -139,6 +139,9 @@ const ContainerDiv= styled.div`
            justify-content: space-between;
             
         }
+        .second__Box{
+            margin: 1.3rem;
+        }
 
         
     }
@@ -149,12 +152,12 @@ const TotalBox=styled.div`
     color: ${(props)=> props.theme.bgColor};
     padding:15px 20px;
     border-radius: 15px;
-    margin-bottom: 1.3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 1.3rem;
     text-align: center;
+    margin-bottom: 1.3rem;
     border: solid 2px ${(props)=>props.theme.accentColor};
         span{
             .total__title{
@@ -163,7 +166,7 @@ const TotalBox=styled.div`
             }
         }
     @media (min-width: 992px){
-       margin-bottom: 0;
+       margin: 0;
     }
 
 `;
@@ -196,6 +199,9 @@ const InforBox=styled.div`
             }
             
         }
+    }
+    @media (min-width: 992px){
+       margin: 0;
     }
    
 `;
@@ -302,7 +308,7 @@ return (
                     </ul>
                     </InforBox>
                     
-                    <TotalBox>
+                    <TotalBox className='second__Box'>
                         <span>
                             <p className='total__title'>RANK:</p>
                             <p>{inforData?.rank}</p>

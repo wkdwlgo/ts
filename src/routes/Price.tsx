@@ -52,27 +52,27 @@ function Price({priceData}:PriceProps) {
         <PriceContainer>
             <div>
                 <span>24 HOUR</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_24h)}>{`${priceData.quotes.USD.percent_change_24h}&#37;`}</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_24h)}>{`${priceData.quotes.USD.percent_change_24h}%`}</PriceValue>
             </div>
             <div>
                 <span>7 DAY</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_7d)}>{`${priceData.quotes.USD.percent_change_7d}&#37;`}&#37;</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_7d)}>{`${priceData.quotes.USD.percent_change_7d}%`}</PriceValue>
             </div>
             <div>
                 <span>1 MONTH</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_30d)}>{`${priceData.quotes.USD.percent_change_30d}&#37;`}</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_30d)}>{`${priceData.quotes.USD.percent_change_30d}%`}</PriceValue>
             </div>
             <div>
                 <span>1 YEAR</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_1y)}>{`${priceData.quotes.USD.percent_change_1y}&#37;`}</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.percent_change_1y)}>{`${priceData.quotes.USD.percent_change_1y}%`}</PriceValue>
             </div>
             <div>
                 <span>24시간 거래 변동률</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.volume_24h_change_24h)}>{`${priceData.quotes.USD.volume_24h_change_24h}&#37;`}</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.volume_24h_change_24h)}>{`${priceData.quotes.USD.volume_24h_change_24h}%`}</PriceValue>
             </div>
             <div >
                 <span>24시간 시가총액(USD) 변동률</span>
-                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.market_cap_change_24h)}>{`${priceData.quotes.USD.market_cap_change_24h}&#37;`}</PriceValue>
+                <PriceValue isPositive={checkBoolean(priceData.quotes.USD.market_cap_change_24h)}>{`${priceData.quotes.USD.market_cap_change_24h}%`}</PriceValue>
             </div>
         </PriceContainer>
     );
