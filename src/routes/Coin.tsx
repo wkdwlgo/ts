@@ -162,6 +162,10 @@ const TotalBox=styled.div`
                 padding-bottom: 0.4rem;
             }
         }
+    @media (min-width: 992px){
+       margin-bottom: 0;
+    }
+
 `;
 
 const InforBox=styled.div`
