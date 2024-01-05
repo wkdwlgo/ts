@@ -1,12 +1,13 @@
 import { useState, useEffect , } from 'react';
-import { useParams, useLocation, } from 'react-router';
+import { useParams, useLocation, useNavigate} from 'react-router';
 import { BrowserRouter as Router, Routes, Route ,Outlet, Link,useMatch } from 'react-router-dom';
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faYoutube } from '@fortawesome/free-brands-svg-icons'
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faHouse } from "@fortawesome/free-solid-svg-icons";
 import Chart from './Chart';
 import Price from './Price';
+
 import { fetchInfoData, fetchPriceData} from "../api";
 import { useQuery } from 'react-query';
 import {Helmet} from "react-helmet";
@@ -98,9 +99,31 @@ const Container =styled.div`
 const Header = styled.header`
     height: 10vh;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin: 1.5rem 0;
+    .header__div{
+        
+    }
+    .Link__div{
+       
+        padding: 0.5rem;
+        border: 2px solid ${(props)=>props.theme.accentColor};
+        border-radius: 50px;
+        background-color: ${(props)=>props.theme.textColor};
+    }
+    .main__fontawsome{
+        font-size: 1.3rem;
+        color: ${(props)=>props.theme.bgColor};
+    }
+    .Link__div:hover{
+        transform: scale(1.05);
+        transition: all 1s ease-in;
+        .main__fontawsome{
+            color: ${(props)=>props.theme.accentColor};
+        }
+        
+    }
 `;
 const Title=styled.h1`
     font-size: 3rem;
@@ -140,7 +163,7 @@ const ContainerDiv= styled.div`
             
         }
         .second__Box{
-            margin: 1.3rem;
+            margin: 1.3rem 0;
         }
 
         
@@ -273,6 +296,7 @@ const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coi
 //     },[coinID])//coinID가 변경되면 useEffect 다시 실행함. [] 이렇게 입력하면 hook에 좋지 않다.
 
 const loading=infoLoading || priceLoading;
+const movePage=useNavigate();
 return (
     <Container>
             <Helmet>
@@ -280,7 +304,9 @@ return (
                 
             </Helmet>
             <Header>
+                <div className='header__div'></div>
                 <Title>{state ? state: loading ? "Loading" :inforData?.name }</Title>
+                <Link to={`/`}><div className='Link__div'><FontAwesomeIcon icon={faArrowRight} className='main__fontawsome'/></div></Link>
             </Header>
            {loading ? (
             <Spinner/>

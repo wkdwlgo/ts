@@ -28,8 +28,13 @@ const PriceContainer= styled.div`
         border-radius: 15px;
     }
     @media (min-width: 992px){  
-    height: 390px;
+    height: 340px;
     
+    }
+    @media (max-width:992px) {
+        div{
+            margin-bottom: 1rem;
+        }
     }
 `;
 
