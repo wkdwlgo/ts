@@ -4,12 +4,19 @@ import Coin from './routes/Coin';
 import Chart from './routes/Chart';
 import Price from './routes/Price';
 
-function App() {
+interface IRouterProps{
+  toggleDark:()=> void;
+  isDark:boolean;
+}
+
+
+
+function App({toggleDark,isDark}:IRouterProps) {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Coins />} />
-        <Route path="/:coinID/*" element={<Coin />} />
+        <Route path="/" element={<Coins toggleDark={toggleDark} />} />
+        <Route path="/:coinID/*" element={<Coin isDark={isDark}/>} />
       </Routes>
     </Router>
   );

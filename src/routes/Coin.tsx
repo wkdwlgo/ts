@@ -83,6 +83,9 @@ export interface PriceData{
     };
 }
 
+interface ICoinProps {
+    isDark: boolean;
+}
 
 
 const Container =styled.div`
@@ -271,7 +274,7 @@ const Tab= styled.span<{isActive:boolean}>`
 `;
 
 
-function Coin() {
+function Coin({isDark}:ICoinProps) {
 const { coinID } = useParams() as unknown as RouteParams;
 const {state} = useLocation() as RouteState;
 const priceMatch = useMatch("/:coinId/price");
@@ -375,7 +378,7 @@ return (
                     </Tabs>
                     
                     <Routes>
-                        <Route path="chart" element={<Chart coinID={coinID!} />} />
+                        <Route path="chart" element={<Chart coinID={coinID!} isDark={isDark!} />} />
                         <Route path="price" element={<Price priceData={priceData!} />} />
                     </Routes>
                     

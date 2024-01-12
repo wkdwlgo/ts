@@ -1,6 +1,6 @@
 
 const BASE_URL="https://api.coinpaprika.com/v1"
-
+//https://cors-anywhere.herokuapp.com
 
 export async function fetchCoins(){
 

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { fetchCoins } from "../api";
 import {Helmet} from "react-helmet";
+
+
 const Container =styled.div`
     margin: 0 auto;
     max-width: 480px;
@@ -18,7 +20,7 @@ const Container =styled.div`
 const Header = styled.header`
     height: 10vh;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin: 1.5rem 0;
     @media (min-width: 992px) {
@@ -38,6 +40,7 @@ const CoinList = styled.ul`
 `;
 
 const Coin= styled.li`
+    border: solid 2px ${(props)=> props.theme.accentColor};
     background-color: ${(props)=> props.theme.textColor};
     color: ${(props)=> props.theme.bgColor};
     padding:20px;
@@ -120,7 +123,7 @@ const rotation = keyframes`
 const Spinner = styled.div`
   height: 5rem;
   width: 5rem;
-  border: 1px solid #3563e9;
+  border: 1px solid ${(props)=> props.theme.accentColor};
   border-radius: 50%;
   border-top: none;
   border-right: none;
@@ -149,7 +152,11 @@ interface ICoin{
     type: string,
 }
 
-function Coins(){
+interface ICoinsProps{
+    toggleDark:()=> void;
+}
+
+function Coins({toggleDark}:ICoinsProps){
     const {isLoading, data}=useQuery<ICoin[]>("allCoins", fetchCoins)
     // const [coins, setCoins]=useState<CoinInterface[]>([]);
     // const [loading, setLoading]=useState(true);
@@ -163,10 +170,13 @@ function Coins(){
     return (
         <Container>
             <Helmet>
+                
                 <title>CCOINFOR</title>
             </Helmet>
             <Header>
+                <button onClick={toggleDark}>toggle</button>
                 <Title>CCOINFOR</Title>
+                <div></div>
             </Header>
            {isLoading ? (
             <Spinner></Spinner>

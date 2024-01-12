@@ -5,6 +5,7 @@ import ApexCharts from 'react-apexcharts';
 import styled, { keyframes } from "styled-components";
 interface ChartProps {
     coinID: string;
+    isDark:boolean;
     }
 interface Ohlcv {
     close: string;
@@ -16,6 +17,7 @@ interface Ohlcv {
     time_open: number;
     volume: string;
 }
+
 const rotation = keyframes`
     from {
         transform: rotate(0deg);
@@ -41,7 +43,7 @@ const ChartContainer=styled.div`
     color:${(props)=>props.theme.accentColor};
 `;
 
-function Chart({coinID}:ChartProps) {
+function Chart({coinID,isDark}:ChartProps,) {
     //const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID));
     const {isLoading, data}=useQuery<Ohlcv[]>(['ohlcv',coinID],()=> fetchCoinHistory(coinID))
     //console.log(data)
@@ -50,13 +52,13 @@ function Chart({coinID}:ChartProps) {
             <ChartContainer>
                 {isLoading ? (<Spinner/>):(<ApexCharts type='candlestick' options={{
                     theme:{
-                        mode:"dark"
+                        mode:isDark? "dark":'light',
                     },
                     chart:{
                         
                             height:700,
                             width:700,
-                            background:'#f5f6fa',
+                            
 
                         
                             toolbar:{

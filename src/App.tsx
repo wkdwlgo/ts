@@ -1,7 +1,8 @@
-import { createGlobalStyle } from "styled-components";
+import { ThemeProvider, createGlobalStyle } from "styled-components";
 import Router from "./Router";
-import { theme } from "./theme";
+import { darktheme,lighttheme } from "./theme";
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { useState } from "react";
 
 const GlobalStyle=createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
@@ -53,7 +54,7 @@ table {
 }
 body {
   font-family: 'Montserrat', sans-serif;
-  background-color: ${(props)=>props.theme.bgColor};
+  background-color: ${(props)=>props.theme.textColor};
   color: ${(props)=>props.theme.textColor};
 }
 a {
@@ -63,12 +64,16 @@ a {
 `;
 
 function App() {
-  
+	 const [isDark, setIsDark]= useState(false);
+	 const toggleDark= ()=> setIsDark((current) => !current);
   return (
     <>
+	  <ThemeProvider theme={isDark ? darktheme: lighttheme}>
+	  
       <GlobalStyle/>
-      <Router/>
+      <Router toggleDark={toggleDark} isDark={isDark}/>
 	  <ReactQueryDevtools initialIsOpen={true}/>
+	  </ThemeProvider>
     </>
    
   );
