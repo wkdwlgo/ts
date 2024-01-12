@@ -152,11 +152,7 @@ interface ICoin{
     type: string,
 }
 
-interface ICoinsProps{
-    toggleDark:()=> void;
-}
-
-function Coins({toggleDark}:ICoinsProps){
+function Coins(){
     const {isLoading, data}=useQuery<ICoin[]>("allCoins", fetchCoins)
     // const [coins, setCoins]=useState<CoinInterface[]>([]);
     // const [loading, setLoading]=useState(true);
@@ -174,7 +170,7 @@ function Coins({toggleDark}:ICoinsProps){
                 <title>CCOINFOR</title>
             </Helmet>
             <Header>
-                <button onClick={toggleDark}>toggle</button>
+                <button >toggle</button>
                 <Title>CCOINFOR</Title>
                 <div></div>
             </Header>

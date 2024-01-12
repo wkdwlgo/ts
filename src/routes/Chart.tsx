@@ -3,9 +3,12 @@ import { useQuery } from 'react-query';
 import { fetchCoinHistory} from "../api";
 import ApexCharts from 'react-apexcharts';
 import styled, { keyframes } from "styled-components";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from '../atoms';
+
 interface ChartProps {
     coinID: string;
-    isDark:boolean;
+   
     }
 interface Ohlcv {
     close: string;
@@ -43,9 +46,10 @@ const ChartContainer=styled.div`
     color:${(props)=>props.theme.accentColor};
 `;
 
-function Chart({coinID,isDark}:ChartProps,) {
+function Chart({coinID}:ChartProps,) {
     //const{isLoading: priceLoading, data: priceData}=useQuery<PriceData>(['price',coinID], () => fetchPriceData(coinID));
     const {isLoading, data}=useQuery<Ohlcv[]>(['ohlcv',coinID],()=> fetchCoinHistory(coinID))
+    const isDark= useRecoilValue(isDarkAtom);
     //console.log(data)
     return (
         <>
