@@ -52,7 +52,7 @@ function checkBoolean(value:number){
 }
 
 function Price({priceData}:PriceProps) {
-    console.log(priceData)
+    //console.log(priceData)
     return (
         <PriceContainer>
             <div>

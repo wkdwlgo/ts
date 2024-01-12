@@ -48,7 +48,7 @@ function Chart({coinID}:ChartProps) {
     return (
         <>
             <ChartContainer>
-                {isLoading ? (<Spinner/>):(<ApexCharts type='line' options={{
+                {isLoading ? (<Spinner/>):(<ApexCharts type='candlestick' options={{
                     theme:{
                         mode:"dark"
                     },
@@ -63,9 +63,7 @@ function Chart({coinID}:ChartProps) {
                                 show:false,
                             },
                     },
-                    grid:{
-                        show:false,
-                    },
+                   
                     stroke:{
                         
                         curve:"smooth",
@@ -94,14 +92,36 @@ function Chart({coinID}:ChartProps) {
                         },
                       },
                     colors: ['#fbc531'],
+                    plotOptions: {
+                        candlestick: {
+                          colors: {
+                            upward: '#e94f6b',
+                            downward: '#4996d2'
+                          }
+                        }
+                      }
                 }}
                 
                 series={[
-                    {   
-                        name:"price",
-                        data: data?.map((price) => parseFloat(price.close)) ?? []// close: string; 때문에 형변환해주기!
-                    },
+                    // {   
+                    //     name:"price",
+                    //     data: data?.map((price) => parseFloat(price.close)) ?? []// close: string; 때문에 형변환해주기!
+                    // },
+                    {
+                        data: 
+                          data?.map((price) => {
+                            return [
+                              price.time_close,
+                              parseFloat(price.open),
+                              parseFloat(price.high),
+                              parseFloat(price.low),
+                              parseFloat(price.close),
+                            ];
+                          }) ?? [],
+                      },
                 ]} 
+                
+
                 />)}
             </ChartContainer>
         </>
